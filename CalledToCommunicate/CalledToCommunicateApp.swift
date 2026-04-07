@@ -6,12 +6,21 @@
 //
 
 import SwiftUI
+import FirebaseKit
 
 @main
 struct CalledToCommunicateApp: App {
+    @State private var appState: AppState
+
+    init() {
+        FirebaseManager.configure()
+        _appState = State(initialValue: AppState())
+    }
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RootView()
+                .environment(appState)
         }
     }
 }
