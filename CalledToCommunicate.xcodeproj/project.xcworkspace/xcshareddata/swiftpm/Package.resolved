@@ -42,8 +42,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Tirzaan/FirebaseKit.git",
       "state" : {
-        "revision" : "3dc468e89db259341538a0153f8bb1a92a52224f",
-        "version" : "1.0.6"
+        "revision" : "c5f7972a66ac647deb20635409e177bd4a1f0a7d",
+        "version" : "1.1.0"
       }
     },
     {

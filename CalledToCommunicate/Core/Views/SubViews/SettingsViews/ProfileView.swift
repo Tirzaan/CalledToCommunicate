@@ -9,6 +9,13 @@ import SwiftUI
 import FirebaseKit
 
 struct ProfileView: View {
+    @State private var showConfirmAccountAlert: Bool = false
+    @State private var showAlert: Bool = false
+    @State private var alertTitle: String = ""
+    @State private var alertSubtitle: String = ""
+    @State private var email: String = ""
+    @State private var password: String = ""
+    
     var body: some View {
         VStack {
             List {
@@ -19,15 +26,52 @@ struct ProfileView: View {
             
             Text("Sign Out")
                 .defaultButton {
-                    signout()
+                    if AuthService.shared.isSignedIn {
+                        signout()
+                    } else {
+                        alertTitle = "Not Signed In"
+                        alertSubtitle = "you are not signed into an account"
+                        showAlert = true
+                    }
                 }
-                .padding(.horizontal)
             
             Text("Delete Account")
                 .destructiveButton {
-                    deleteAccount()
+                    if AuthService.shared.isSignedIn {
+                        showConfirmAccountAlert = true
+                    } else {
+                        alertTitle = "Not Signed In"
+                        alertSubtitle = "you are not signed into an account"
+                        showAlert = true
+                    }
                 }
-                .padding(.horizontal)
+                .alert(alertTitle, isPresented: $showAlert) {
+                    Button("OK") {
+                        alertTitle = ""
+                        alertSubtitle = ""
+                    }
+                } message: {
+                    Text(alertSubtitle)
+                }
+        }
+        .alert("Please Confirm Account", isPresented: $showConfirmAccountAlert) {
+            TextField("Email...", text: $email)
+            TextField("Password...", text: $password)
+            Button("Delete", role: .destructive) {
+                signIn()
+                deleteAccount()
+            }
+        }
+        .toolbar(.hidden, for: .tabBar)
+    }
+    
+    private func signIn() {
+        Task {
+            do {
+                _ = try await AuthService.shared.signIn(email: email, password: password)
+            } catch {
+                print(error.localizedDescription)
+            }
         }
     }
     
@@ -42,9 +86,13 @@ struct ProfileView: View {
     private func deleteAccount() {
         Task {
             do {
-                try await FirestoreService.shared.delete(collection: "users", documentID: AuthService.shared.userID ?? "1234567890ABC")
+                let userID = AuthService.shared.userID ?? ""
                 try await AuthService.shared.deleteAccount()
+                try await FirestoreService.shared.delete(collection: "users", documentID: userID)
             } catch {
+                if error.localizedDescription == "This operation is sensitive and requires recent authentication. Log in again before retrying this request." {
+                    try? AuthService.shared.signOut()
+                }
                 print(error.localizedDescription)
             }
         }

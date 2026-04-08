@@ -6,17 +6,35 @@
 //
 
 import SwiftUI
-import FirebaseKit
 
 @Observable
 class AppState {
-    private(set) var isSignedIn: Bool
-    
-    init() {
-        self.isSignedIn = AuthService.shared.isSignedIn
+    private(set) var showTabbar: Bool {
+        didSet {
+            UserDefaults.showTabbarView = showTabbar
+        }
     }
     
-    func updateViewState(isSignedIn: Bool) {
-        self.isSignedIn = isSignedIn
+    init(showTabbar: Bool = UserDefaults.showTabbarView) {
+        self.showTabbar = showTabbar
+    }
+    
+    func updateViewState(showTabbarView: Bool) {
+        showTabbar = showTabbarView
+    }
+}
+
+extension UserDefaults {
+    private struct Keys {
+        static let showTabbarView = "showTabbarView"
+    }
+    
+    static var showTabbarView: Bool {
+        get {
+            standard.bool(forKey: Keys.showTabbarView)
+        }
+        set {
+            standard.set(newValue, forKey: Keys.showTabbarView)
+        }
     }
 }

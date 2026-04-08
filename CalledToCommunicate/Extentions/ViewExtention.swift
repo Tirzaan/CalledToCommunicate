@@ -17,6 +17,7 @@ extension View {
             .frame(maxWidth: .infinity)
             .background(.accent)
             .rounded(8)
+            .padding(.horizontal)
             .asButton(.press) {
                 action()
             }
@@ -30,6 +31,21 @@ extension View {
             .frame(maxWidth: .infinity)
             .background(.red)
             .rounded(8)
+            .padding(.horizontal)
+            .asButton(.press) {
+                action()
+            }
+    }
+    
+    func LoginButton(action: @escaping () -> ()) -> some View {
+        self
+            .foregroundStyle(.white)
+            .font(.headline)
+            .padding()
+            .frame(maxWidth: .infinity)
+            .background(.black)
+            .rounded(8)
+            .padding(.horizontal)
             .asButton(.press) {
                 action()
             }

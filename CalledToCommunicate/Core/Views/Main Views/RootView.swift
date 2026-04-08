@@ -30,10 +30,8 @@ struct RootView: View {
         .onAppear {
             _ = AuthService.shared.addAuthStateListener { user in
                 isSignedIn = user != nil
+                showSheet = !isSignedIn
             }
-            showSheet = !isSignedIn
-        }
-        .onChange(of: AuthService.shared.isSignedIn) { _, isSignedIn in
             showSheet = !isSignedIn
         }
         .sheet(isPresented: $showSheet) {

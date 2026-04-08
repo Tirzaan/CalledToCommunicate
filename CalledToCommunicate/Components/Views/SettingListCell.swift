@@ -17,6 +17,8 @@ struct SettingListCell: View {
         HStack {
             Image(systemName: systemImage)
             Text(settingName)
+            Rectangle()
+                .fill(.black.opacity(0.001))
         }
         .asButton(.press) {
             action()
