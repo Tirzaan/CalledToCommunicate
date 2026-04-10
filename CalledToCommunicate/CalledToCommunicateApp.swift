@@ -21,6 +21,9 @@ struct CalledToCommunicateApp: App {
         WindowGroup {
             RootView()
                 .environment(appState)
+                .onOpenURL { url in
+                    _ = GoogleSignInService.shared.handle(url)
+                }
         }
     }
 }

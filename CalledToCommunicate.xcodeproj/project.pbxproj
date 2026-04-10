@@ -17,9 +17,22 @@
 		993D8DE32F739998007D6109 /* CalledToCommunicate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CalledToCommunicate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		9905C0BA2F88089C00B12AAC /* Exceptions for "CalledToCommunicate" folder in "CalledToCommunicate" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 993D8DE22F739998007D6109 /* CalledToCommunicate */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		993D8DE52F739998007D6109 /* CalledToCommunicate */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				9905C0BA2F88089C00B12AAC /* Exceptions for "CalledToCommunicate" folder in "CalledToCommunicate" target */,
+			);
 			path = CalledToCommunicate;
 			sourceTree = "<group>";
 		};
@@ -277,6 +290,7 @@
 				DEVELOPMENT_TEAM = ZF8P9WP3C5;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = CalledToCommunicate/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -309,6 +323,7 @@
 				DEVELOPMENT_TEAM = ZF8P9WP3C5;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = CalledToCommunicate/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
