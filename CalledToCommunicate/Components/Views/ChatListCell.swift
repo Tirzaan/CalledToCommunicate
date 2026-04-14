@@ -8,13 +8,27 @@
 import SwiftUI
 
 struct ChatListCell: View {
-    var imageName: String = ""
+    var imageName: String = Constants.image
+    var title: String = MockData.shared.title("Chat")
+    var lastMessage: String = "This is the last message"
     
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        HStack {
+            ImageLoaderView(imageName)
+            
+            VStack {
+                Text(title)
+                    .font(.headline)
+                
+                Text(lastMessage)
+                    .font(.subheadline)
+            }
+        }
     }
 }
 
 #Preview {
-    ChatListCell()
+    List {
+        ChatListCell()
+    }
 }
