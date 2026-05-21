@@ -11,6 +11,7 @@ import FirebaseKit
 @main
 struct CalledToCommunicateApp: App {
     @State private var appState: AppState
+    @StateObject private var navManager = NavigationManager()
 
     init() {
         FirebaseManager.configure()
@@ -19,11 +20,17 @@ struct CalledToCommunicateApp: App {
 
     var body: some Scene {
         WindowGroup {
-            RootView()
-                .environment(appState)
-                .onOpenURL { url in
-                    _ = GoogleSignInService.shared.handle(url)
-                }
+            NavigationStack(path: $navManager.path) {
+                RootView()
+                    .environment(appState)
+                    .environmentObject(navManager)
+                    .onOpenURL { url in
+                        _ = GoogleSignInService.shared.handle(url)
+                    }
+                    .navigationDestination(for: AppDestination.self) { destination in
+                        AppDestinationView(destination)
+                    }
+            }
         }
     }
 }

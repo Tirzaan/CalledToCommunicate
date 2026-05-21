@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-struct UserModel: Identifiable, Codable {
+struct UserModel: Identifiable, Codable, Hashable {
     let id: String
     let name: String?
     let tribe: String?
@@ -27,6 +27,14 @@ struct UserModel: Identifiable, Codable {
         self.birthDate = birthDate
         self.email = email
         self.isAnonymousUser = isAnonymousUser
+    }
+    
+    static func == (lhs: UserModel, rhs: UserModel) -> Bool {
+        lhs.id == rhs.id
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
 }
     

@@ -33,8 +33,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Tirzaan/ExtentionsPlus.git",
       "state" : {
-        "revision" : "aae17316b10c9f68e33d142ef259f824e706a042",
-        "version" : "1.0.0"
+        "revision" : "e75ce218e7690cc57b194f74e70b85dc2824ca89",
+        "version" : "1.0.5"
       }
     },
     {
@@ -51,8 +51,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Tirzaan/FirebaseKit.git",
       "state" : {
-        "revision" : "8008aa480e86d2304527f2f0a5761284cb61efd0",
-        "version" : "1.1.4"
+        "revision" : "e62410447a6b9682bf873c2c971757df2a8193a8",
+        "version" : "1.1.7"
       }
     },
     {

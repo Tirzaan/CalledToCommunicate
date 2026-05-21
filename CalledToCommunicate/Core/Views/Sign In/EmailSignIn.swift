@@ -11,16 +11,12 @@ import FirebaseKit
 internal import FirebaseAuth
 
 struct EmailSignIn: View {
+    @EnvironmentObject private var navManager: NavigationManager
+    @Environment(Onboarding.self) private var onboarding
     @Environment(\.dismiss) private var dismiss
     
     @State private var email = ""
     @State private var password = ""
-    @State private var name = ""
-    @State private var selectedTribe = "None"
-    @State private var selectedBirthdate = Date()
-    @State private var tribes: [String] = ["None"]
-    @State private var selectedRole = "Student"
-    @State private var roles: [String] = ["None"]
     
     @State private var showAlert = false
     @State private var alertTitle = "Title"
@@ -36,23 +32,7 @@ struct EmailSignIn: View {
                 SecureField("Enter Password...", text: $password)
                 
                 if newUser {
-                    TextField("Enter Name...", text: $name)
-                    DatePicker("Select Birthdate", selection: $selectedBirthdate, displayedComponents: .date)
-                    
-                    Picker("Select a role", selection: $selectedRole) {
-                        ForEach(roles, id: \.self) { role in
-                            Text(role)
-                        }
-                    }
-                    .pickerStyle(.menu)
-                    if selectedRole == "Student" {
-                        Picker("Select a Tribe", selection: $selectedTribe) {
-                            ForEach(tribes, id: \.self) { tribe in
-                                Text(tribe)
-                            }
-                        }
-                        .pickerStyle(.menu)
-                    }
+                    SecureField("Confirm Password...", text: $password)
                 }
             }
             
@@ -83,54 +63,20 @@ struct EmailSignIn: View {
             Text(alertSubtitle)
         })
         .navigationTitle(newUser ? "Sign Up" : "Sign In")
-        .task {
-            await loadRoles()
-        }
-        .task {
-            await loadTribes()
-        }
-    }
-    
-    private func loadRoles() async {
-        do {
-            roles = try await FirestoreService.shared.fetchField(
-                collection: "admin_controls",
-                documentID: "roles",
-                field: "list_of_roles",
-                as: [String].self
-            ) ?? ["None"]
-            selectedRole = roles.first ?? "None"
-        } catch {
-            print("Failed to load tribes: \(error.localizedDescription)")
-        }
-    }
-    
-    private func loadTribes() async {
-        do {
-            tribes = try await FirestoreService.shared.fetchField(
-                collection: "admin_controls",
-                documentID: "tribes",
-                field: "list_of_tribes",
-                as: [String].self
-            ) ?? ["None"]
-            selectedTribe = tribes.first ?? "None"
-        } catch {
-            print("Failed to load tribes: \(error.localizedDescription)")
-        }
     }
     
     func signUp() {
         Task {
             do {
+                onboarding.isComplete = false
+                
                 let user = try await AuthService.shared.signUp(email: email, password: password)
                 
-                let userModel = UserModel(id: user.uid, name: name, tribe: selectedTribe, role: selectedRole, dateCreated: .now, birthDate: selectedBirthdate, email: email)
+                let userModel = UserModel(id: user.uid, name: "", tribe: nil, role: nil, dateCreated: .now, birthDate: nil, email: email)
                 
                 try await FirestoreService.shared.save(userModel, collection: "users")
                 
-                _ = try await AuthService.shared.updateDisplayName(name)
-                
-                dismiss()
+                navManager.path.append(AppView.personalInfo)
             } catch {
                 if error.localizedDescription == "The email address is badly formatted." || error.localizedDescription == "The email address is badly formatted." || error.localizedDescription == "The email address is already in use by another account." {
                     emailError(error.localizedDescription)
@@ -153,7 +99,6 @@ struct EmailSignIn: View {
                 dismiss()
             } catch {
                 genericError(error.localizedDescription)
-                
                 print(error.localizedDescription)
             }
         }

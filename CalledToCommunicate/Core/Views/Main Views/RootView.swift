@@ -9,9 +9,17 @@ import SwiftUI
 import SFSymbols
 import FirebaseKit
 
+@Observable
+class Onboarding {
+    var isComplete: Bool = true
+}
+
 struct RootView: View {
+    @EnvironmentObject private var navManager: NavigationManager
+    
     @State private var isSignedIn = AuthService.shared.isSignedIn
-    @State private var showSheet = false
+    @State private var onboarding = Onboarding()
+    @State private var showFullScreenCover: Bool = false
     
     var body: some View {
         TabView {
@@ -30,13 +38,33 @@ struct RootView: View {
         .onAppear {
             _ = AuthService.shared.addAuthStateListener { user in
                 isSignedIn = user != nil
-                showSheet = !isSignedIn
+                if isSignedIn && onboarding.isComplete {
+                    showFullScreenCover = false
+                } else {
+                    showFullScreenCover = true
+                }
             }
-            showSheet = !isSignedIn
+            showFullScreenCover = !isSignedIn
         }
-        .sheet(isPresented: $showSheet) {
-            SignUpView()
-                .interactiveDismissDisabled()
+        .onChange(of: onboarding.isComplete) {
+            if isSignedIn && onboarding.isComplete {
+                showFullScreenCover = false
+            } else {
+                showFullScreenCover = true
+            }
+        }
+        .fullScreenCover(isPresented: $showFullScreenCover) {
+            NavigationStack(path: $navManager.path) {
+                WelcomeView()
+                    .interactiveDismissDisabled()
+                    .environmentObject(navManager)
+                    .environment(onboarding)
+                    .navigationDestination(for: AppDestination.self) { destination in
+                        AppDestinationView(destination)
+                            .environmentObject(navManager)
+                            .environment(onboarding)
+                    }
+            }
         }
     }
 }
